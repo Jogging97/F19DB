@@ -1,0 +1,246 @@
+<html>
+<head>
+    <title>Music Database</title>
+    <!--M Links-->
+    <link href="{{ url_for('static', filename = 'css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="shortcut icon" href="{{ url_for('static', filename = 'earphone.png' ) }}">
+    <link href="{{ url_for('static', filename = 'css/bootstrap.min.css') }}" rel="stylesheet">
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.2.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename = 'js/bootstrap.min.js') }}"></script>
+</head>
+<body>
+<div class="container">
+    <div class="well text-center">
+        <h1>Music Database Web Application</h1>
+    </div>
+    <div class="container">
+        <!-- ___________________________________________________________________________________________________________ -->
+        <style>
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+            }            .navbar {
+                overflow: hidden;
+                background-color: #333;
+            }            .navbar a {
+                float: left;
+                font-size: 16px;
+                color: white;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+            }            .dropdown {
+                float: left;
+                overflow: hidden;
+            }            .dropdown .dropbtn {
+                font-size: 16px;
+                border: none;
+                outline: none;
+                color: white;
+                padding: 14px 16px;
+                background-color: inherit;
+                font-family: inherit;
+                margin: 0;
+            }            .navbar a:hover, .dropdown:hover .dropbtn {
+                background-color: gray;
+            }            .dropdown-content {
+                display: none;
+                position: absolute;
+                background-color: #F9F9F9
+;
+                min-width: 160px;
+                box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+                z-index: 1;
+            }            .dropdown-content a {
+                float: none;
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+                text-align: left;
+            }            .dropdown-content a:hover {
+                background-color: #ddd;
+            }            .dropdown:hover .dropdown-content {
+                display: block;
+            }
+
+
+        </style>
+        </head>
+        <body>
+        <div class="navbar">
+            <a href="/s_search">Songs</a>
+            <a href="/releases">Releases</a>
+            <a href="/playlist">Your Playlists</a>
+            <a href="/review">Your Reviews</a>
+
+        </div>
+        </body>
+    </div>
+    <!-- ___________________________________________________________________________________________________________ -->
+    {#-------search funtion------#}
+    <button type="button" class="btn btn-info  pull-left btn-lg " data-toggle="modal"
+                            data-target="#myModal">Search for release
+    </button>
+
+    <!-- Search Modal -->
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">What are you looking for?</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ url_for('releases') }}" method="POST">
+                        <div class="form-group">
+                            <label>Album:</label>
+                            <input type="text" class="form-control" name="album">
+                        </div>
+                        <div class="form-group">
+                            <label>Artist Name:</label>
+                            <input type="text" class="form-control" name="artist">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Genre</label>
+                            <select class="form-control" name="genre">
+                                <option selected></option>
+                                <option>Rock</option>
+                                <option>Electronic</option>
+                                <option>Hip Hop</option>
+                                <option>Folk, World, & Country</option>
+                                <option>Jazz</option>
+                                <option>Funk</option>
+                                <option>Non-Music</option>
+                                <option>Pop</option>
+                                <option>Reggae</option>
+                                <option>Latin</option>
+                                <option>Stage & Screen</option>
+                                <option>Brass & Military</option>
+                                <option>Classical</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <button class="btn btn-primary" type="submit">Done</button>
+                        </div>
+                    </form>
+                </div>
+                <!--Close Button -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+    {#---------search function---------#}
+    {% block body %}
+    <div class="col md-12">
+        <h2>Release List
+        </h2>
+        <!--Button that alters the insert or delete in a table-->
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success alert-dismissable" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <!-- Beginning of Table with Headers-->
+        <table class="table table-striped">
+            <tr>
+                <th>Album</th>
+                <th>Artist</th>
+                <th>Release Date</th>
+                <th>Genre</th>
+                <th>Action</th>
+            </tr>
+            {% for row in releases %}
+            <tr>
+                <td>{{ row.rName }}</td>
+                <td>{{ row.aName }}</td>
+                <td>{{ row.rDate }}</td>
+                <td>{{ row.gName }}</td>
+                <td>
+                    <a class="btn btn-primary btn-xs btn-block" data-toggle="modal"
+                    data-target="#modaledit{{row.rID}}">Review</a>
+                </td>
+            </tr>
+
+            <!-- Review Modal -->
+            <div id="modaledit{{row.rID}}" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Review For:  <b>"{{ row.rName }}"</b><br>By: <b>{{ row.aName }}</b></h4>
+                        </div>
+                        <div class="modal-body">
+                            <form action="{{ url_for('review') }}" method="POST">
+                                <div class="form-group">
+                                    <label>Review:</label>
+                                    <input type="text" class="form-control" name="rText" value="{{ row.rText }}" required="1">
+                                </div>
+                                <div class="form-group">
+                                    <label>Previous Rating: {{ row.rRating }}</label>
+                                </div>
+                                <div class="form-group">
+                                    <label>Rating:</label>
+                                    <div class="form-check form-check-inline">
+                                      <input type="hidden" name="rID" value="{{row.rID}}">
+                                      <input class="form-check-input" type="radio" name="rating" id="inlineRadio1" value="1" required="1">
+                                      <label class="form-check-label" for="inlineRadio1">1</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                      <input class="form-check-input" type="radio" name="rating" id="inlineRadio2" value="2" required="1">
+                                      <label class="form-check-label" for="inlineRadio2">2</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                      <input class="form-check-input" type="radio" name="rating" id="inlineRadio3" value="3" required="1">
+                                      <label class="form-check-label" for="inlineRadio3">3</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                      <input class="form-check-input" type="radio" name="rating" id="inlineRadio4" value="4" required="1">
+                                      <label class="form-check-label" for="inlineRadio4">4</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                      <input class="form-check-input" type="radio" name="rating" id="inlineRadio5" value="5" required="1">
+                                      <label class="form-check-label" for="inlineRadio5">5</label>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-primary" type="submit">Update</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+{% endblock %}<!--End of the page -->
+<div class="well">
+    <h7>CS542-Fall2019
+        <span class="pull-right">Group 7</span>
+    </h7>
+</div>
+</div>
+</body>
+
+
+

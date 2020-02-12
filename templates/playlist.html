@@ -1,0 +1,148 @@
+<html>
+<head>
+    <title>Music Database</title>
+    <!--M Links-->
+    <link href="{{ url_for('static', filename = 'css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="shortcut icon" href="{{ url_for('static', filename = 'earphone.png' ) }}">
+    <link href="{{ url_for('static', filename = 'css/bootstrap.min.css') }}" rel="stylesheet">
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.2.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename = 'js/bootstrap.min.js') }}"></script>
+</head>
+<body>
+<div class="container">
+    <div class="well text-center">
+        <h1>Music Database Web Application</h1>
+    </div>
+    <div class="container">
+        <!-- ___________________________________________________________________________________________________________ -->
+        <style>
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+            }            .navbar {
+                overflow: hidden;
+                background-color: #333;
+            }            .navbar a {
+                float: left;
+                font-size: 16px;
+                color: white;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+            }            .dropdown {
+                float: left;
+                overflow: hidden;
+            }            .dropdown .dropbtn {
+                font-size: 16px;
+                border: none;
+                outline: none;
+                color: white;
+                padding: 14px 16px;
+                background-color: inherit;
+                font-family: inherit;
+                margin: 0;
+            }            .navbar a:hover, .dropdown:hover .dropbtn {
+                background-color: gray;
+            }            .dropdown-content {
+                display: none;
+                position: absolute;
+                background-color: #F9F9F9
+;
+                min-width: 160px;
+                box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+                z-index: 1;
+            }            .dropdown-content a {
+                float: none;
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+                text-align: left;
+            }            .dropdown-content a:hover {
+                background-color: #ddd;
+            }            .dropdown:hover .dropdown-content {
+                display: block;
+            }
+
+
+        </style>
+        </head>
+        <body>
+        <div class="navbar">
+            <a href="/s_search">Songs</a>
+            <a href="/releases">Releases</a>
+            <a href="/playlist">Your Playlists</a>
+            <a href="/review">Your Reviews</a>
+
+        </div>
+        </body>
+    </div>
+    <!-- ___________________________________________________________________________________________________________ -->
+
+    {#---------search function---------#}
+    {% block body %}
+    <div class="col md-12">
+        <h2>Playlists</h2>
+        <!--Button that alters the insert or delete in a table-->
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success alert-dismissable" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <!-- Playlists -->
+        {% for playlist in playlists %}
+        <h1>{{ playlist.pName }}</h1>
+        <table class="table table-striped">
+            <tr>
+                <th>Song Name</th>
+                <th>Album Name</th>
+                <th>Action</th>
+            </tr>
+            <!-- Tracks -->
+            {% for row in playlist.pTracks %}
+            <tr>
+                <td>{{ row.tName }}</td>
+                <td>{{ row.rName }}</td>
+                <td>
+                    <form action='/playlistcontains' method="POST">
+                        <div class="form-group">
+                            <input type="hidden" name="pName" value="{{playlist.pName}}">
+                            <input type="hidden" name="rID" value="{{row.rID}}">
+                            <input type="hidden" name="tPosition" value="{{row.tPosition}}">
+                            <input type="hidden" name="operation" value="delete">
+                            <button class="btn btn-primary" type="submit">Remove</button>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% endfor %}
+
+        <form action='/playlist' method="POST">
+            <div class="form-group">
+                <input type="text" name="pName" value="">
+                <button class="btn btn-primary" type="submit">Create Playlist</button>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+{% endblock %}<!--End of the page -->
+<div class="well">
+    <h7>CS542-Fall2019
+        <span class="pull-right">Group 7</span>
+    </h7>
+</div>
+</div>
+</body>
+
+
+

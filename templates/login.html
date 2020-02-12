@@ -1,0 +1,55 @@
+<html>
+<head>
+    <title>Music Database</title>
+    <!--M Links-->
+    <link href="{{url_for('static', filename = 'css/bootstrap.min.css')}}" rel="stylesheet">
+    <link rel="shortcut icon" href="{{url_for('static', filename = 'earphone.png' )}}">
+    <link href="{{url_for('static', filename = 'css/bootstrap.min.css')}}" rel="stylesheet">
+    <script type="text/javascript" src="{{url_for('static', filename='js/jquery-3.2.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename = 'js/bootstrap.min.js')}}"></script>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="well text-center">
+        <img class="mb-4" src="{{url_for('static', filename = 'earphone.png' )}}" alt="" width="72" height="72">
+        <h3>Music Database Web Application</h3>
+        <h1 class="h4 mb-3 font-weight-normal">Please log in</h1>
+        <p></p>
+
+        <!--Button that alters the insert or delete in a table-->
+        {%with messages = get_flashed_messages()%}
+        {%if messages%}
+        {% for message in messages %}
+        <div class="alert alert-warning alert-dismissable" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{message}}
+        </div>
+        {%endfor%}
+        {%endif%}
+        {%endwith%}
+
+        <form class="form-signin" action="{{ url_for('login') }}" method="POST">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Username" name="uUsername" required>
+                <input type="password" class="form-control" placeholder="Password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-lg btn-primary btn-block">Log in</button>
+        </form>
+
+
+        <p></p>
+        <a href="/signup">New user? Click to Register</a>
+        <p></p>
+        <a href="/">Check music? Go to Homepage</a>
+        <p></p>
+        <p class="mt-5 mb-3 text-muted">Group 7 - CS542 Fall 2019</p>
+
+
+    </div>
+</div>
+</body>
+</html>
